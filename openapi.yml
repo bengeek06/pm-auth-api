@@ -1,0 +1,216 @@
+openapi: 3.0.3
+info:
+  title: PM Auth API
+  version: "1.0.0"
+  description: API for authentication, token management, and configuration.
+
+servers:
+  - url: http://localhost:5000
+
+paths:
+  /login:
+    post:
+      summary: User login and token issuance
+      description: |
+        Authenticates a user and issues JWT access and refresh tokens as HttpOnly cookies.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful, tokens set as cookies
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '401':
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+
+  /logout:
+    post:
+      summary: User logout and token revocation
+      description: |
+        Blacklists the access token, deletes the refresh token, and clears authentication cookies.
+      responses:
+        '200':
+          description: Logout successful, cookies cleared
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          description: Missing tokens
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+
+  /refresh:
+    post:
+      summary: Refresh access token
+      description: |
+        Issues a new JWT access token using a valid refresh token. Rotates the refresh token.
+      responses:
+        '200':
+          description: Token refreshed, new access token set as cookie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          description: Missing refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '401':
+          description: Invalid or expired refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+
+  /verify:
+    get:
+      summary: Verify access token
+      description: |
+        Verifies the validity of the JWT access token from cookies.
+      responses:
+        '200':
+          description: Token is valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyResponse'
+        '401':
+          description: Token is missing, invalid, expired, or revoked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+
+  /config:
+    get:
+      summary: Get application configuration
+      description: Returns the current application configuration.
+      responses:
+        '200':
+          description: Application configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigResponse'
+
+  /version:
+    get:
+      summary: Get API version
+      description: Returns the current API version.
+      responses:
+        '200':
+          description: API version
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: access_token
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+    VerifyResponse:
+      type: object
+      properties:
+        user_id:
+          type: string
+        company_id:
+          type: integer
+        email:
+          type: string
+        valid:
+          type: boolean
+
+    ConfigResponse:
+      type: object
+      properties:
+        FLASK_ENV:
+          type: string
+        DEBUG:
+          type: string
+        DATABASE_URI:
+          type: string
+
+    VersionResponse:
+      type: object
+      properties:
+        version:
+          type: string
+
+    RefreshToken:
+      type: object
+      properties:
+        id:
+          type: integer
+        token:
+          type: string
+        user_id:
+          type: integer
+        company_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        expires_at:
+          type: string
+          format: date-time
+        revoked:
+          type: boolean
+
+    TokenBlacklist:
+      type: object
+      properties:
+        id:
+          type: integer
+        jti:
+          type: string
+        user_id:
+          type: integer
+        company_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        expires_at:
+          type: string
+          format: date-time
+
+security:
+  - cookieAuth: []

@@ -9,6 +9,7 @@ Flask-SQLAlchemy
 marshmallow-sqlalchemy
 PyJWT
 requests
+psycopg2-binary
 pytest
 pytest-cov
 pylint

@@ -55,8 +55,7 @@ def check_credentials(email, password):
         try:
             payload = {'email': email, 'password': password}
             logger.debug(
-                "Verifying password for user %s at %s/verify_password",
-                email, user_service_url
+                f"Verifying password for user {email} at {user_service_url}/verify_password"
                 )
 
             # Call the user service to verify the password
@@ -79,22 +78,13 @@ def check_credentials(email, password):
 
             user = resp.json()
             logger.debug("User data: %s", user)
-            if user.get('valid') is not True:
+            user_id = user.get('id')
+            
+            if not user_id:
                 logger.error("Invalid user credentials.")
                 return None
 
-            # If the user is valid, fetch the full user data
-            user_id = user.get('user_id')
-            if not user_id:
-                logger.error("User ID not found in user data.")
-                return None
-
-            return {
-                'user_id': user_id,
-                'username': user.get('username'),
-                'company_id': user.get('company_id'),
-                'is_admin': user.get('is_admin', False)
-            }
+            return user
 
         except requests.Timeout:
             logger.error("User service request timed out.")

@@ -29,7 +29,8 @@ class ConfigResource(Resource):
         """
         config = {
             "FLASK_ENV": os.getenv("FLASK_ENV"),
-            "DEBUG": os.getenv("DEBUG"),
-            "DATABASE_URI": os.getenv("DATABASE_URI")
+            "DATABASE_URL": os.getenv("DATABASE_URL"),
+            "LOG_LEVEL": os.getenv("LOG_LEVEL", "INFO"),
+            "USER_SERVICE_URL": os.getenv("USER_SERVICE_URL"),
         }
         return config, 200

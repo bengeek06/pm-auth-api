@@ -38,6 +38,7 @@ def check_credentials(email, password):
             'email': email,
             'hashed_password': 'fakehash'
         }
+
     if env in ['production', 'staging']:
         dotenv.load_dotenv(f'.env.{env}')
         user_service_url = os.getenv('USER_SERVICE_URL')
@@ -54,14 +55,14 @@ def check_credentials(email, password):
         try:
             payload = {'email': email, 'password': password}
             logger.debug(
-                "Verifying password for user %s at %s/users/verify_password",
+                "Verifying password for user %s at %s/verify_password",
                 email, user_service_url
                 )
 
             # Call the user service to verify the password
             requests_headers = {'X-Internal-Token': internal_secret}
             resp = requests.post(
-                f"{user_service_url}/users/verify_password",
+                f"{user_service_url}/verify_password",
                 json=payload,
                 headers=requests_headers,
                 timeout=2

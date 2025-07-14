@@ -148,7 +148,7 @@ def test_check_credentials_prod_success(monkeypatch):
         def json(self):
             return {
                 'valid': True,
-                'user_id': 42,
+                'id': 42,
                 'username': 'bob',
                 'company_id': 7,
                 'is_admin': True
@@ -162,7 +162,7 @@ def test_check_credentials_prod_success(monkeypatch):
     monkeypatch.setenv('INTERNAL_AUTH_TOKEN', 'secret')
     monkeypatch.setattr(requests, 'post', fake_post)
     user = check_credentials('foo@bar.com', 'pass')
-    assert user['user_id'] == 42
+    assert user['id'] == 42
     assert user['username'] == 'bob'
     assert user['company_id'] == 7
     assert user['is_admin'] is True

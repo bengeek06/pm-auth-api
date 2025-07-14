@@ -22,7 +22,7 @@ class RefreshToken(db.Model):
         revoked (bool): Whether the token has been revoked.
     """
     __tablename__ = 'refresh_tokens'
-    
+
     id = db.Column(
         db.String(36),
         primary_key=True,

@@ -79,7 +79,7 @@ def check_credentials(email, password):
             user = resp.json()
             logger.debug("User data: %s", user)
             user_id = user.get('id')
-            
+
             if not user_id:
                 logger.error("Invalid user credentials.")
                 return None

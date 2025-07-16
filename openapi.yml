@@ -6,6 +6,9 @@ info:
 
 servers:
   - url: http://localhost:5000
+    description: Local development server
+  - url: http://localhost:5000
+    description: Staging development server
 
 paths:
   /login:

@@ -1,4 +1,5 @@
 colorlog
+structlog
 python-dotenv
 Flask
 flask-cors
@@ -9,3 +10,4 @@ Flask-SQLAlchemy
 marshmallow-sqlalchemy
 PyJWT
 requests
+psycopg2-binary

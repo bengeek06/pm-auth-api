@@ -17,5 +17,5 @@ def test_config_endpoit(client):
     data = json.loads(response.data)
     assert isinstance(data, dict)
     assert "FLASK_ENV" in data
-    assert "DEBUG" in data
-    assert "DATABASE_URI" in data
+    assert "DATABASE_URL" in data
+

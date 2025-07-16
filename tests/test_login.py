@@ -4,6 +4,7 @@ test_login.py
 This module contains tests for the /login endpoint to ensure user
 authentication, token issuance, and error handling work as expected.
 """
+import uuid
 
 
 def test_login_success(client, monkeypatch):

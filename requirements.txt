@@ -11,3 +11,4 @@ marshmallow-sqlalchemy
 PyJWT
 requests
 psycopg2-binary
+gunicorn
